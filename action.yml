@@ -1,0 +1,35 @@
+name: 'Zeugwerk Doc Action'
+description: 'Generate documentation on a commented plc project using Zeugwerk Doc'
+branding:
+  icon: 'book-open'
+  color: 'gray-dark'
+inputs:
+  username:
+    description: 'Username for the Zeugwerk Doc Service'
+    required: true
+    default: ''
+  password:
+    description: 'Password for the Zeugwerk Doc Service'
+    required: true
+    default: ''
+  filepath:
+    description: 'Path to one or more plcproj files or folders that contain a config.json file (spaces seperated)'
+    required: true
+    default: ''
+  working-directory:
+    description: 'Working directory'
+    required: true
+    default: '.'
+  fail-on-error:
+    description: 'Fail the build if zkdoc could not be run correctly (syntax error, unsupported syntax in code, ...)'
+    required: false
+    default: true  
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.username }}
+    - ${{ inputs.password }}
+    - ${{ inputs.filepath }}
+    - ${{ inputs.working-directory }}
+    - ${{ inputs.fail-on-error }}    
