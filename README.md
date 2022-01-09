@@ -29,10 +29,23 @@ usually `filepath=.`
 ## Example usage
 
 ```yaml
-uses: zeugwerk/zkdoc-action@v1
-with:
-    username: 'iadonkey'
-    password: 'secret'
-    filepath: 'Untitled1/Untitled1.plcproj'
-    working-directory: '.'
+name: Documentation
+on:
+  workflow_dispatch:
+jobs:
+  Build:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        uses: Zeugwerk/zkdoc-action@1.0.0
+        with:
+          username: ${{ secrets.ACTIONS_ZGWK_USERNAME }}
+          password: ${{ secrets.ACTIONS_ZGWK_PASSWORD }}
+          filepath: 'Untitled1/Untitled1.plcproj'
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          publish_dir: archive/documentation/html
 ```
