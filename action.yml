@@ -18,7 +18,7 @@ inputs:
     default: ''
   working-directory:
     description: 'Working directory'
-    required: true
+    required: false
     default: '.'
   fail-on-error:
     description: 'Fail the build if zkdoc could not be run correctly (syntax error, unsupported syntax in code, ...)'
