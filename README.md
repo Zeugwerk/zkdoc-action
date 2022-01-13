@@ -6,23 +6,15 @@ This [GitHub Action](https://github.com/features/actions) will build [DocFX](htt
 
 ## Inputs
 
-### 'username'
+* `username`: Username of a Zeugwerk Useraccount (Required)
 
-**Required** [Register](https://zeugwerk.at/) to create a user account to use Zeugwerk Doc. Fill-in the username you have chosen here. 
+* `password`: Password of a Zeugwerk Useraccount (Required)
 
-### 'password'
-
-**Required** [Register](https://zeugwerk.at/) to create a user account to use Zeugwerk Doc. Fill-in the password you have chosen here. 
-
-### 'filepath'
-
-**Required** Path to on or more plcproj files, relative to the working directory. Alternatively for applications that are developed with the
+* `filepath`: Path to on or more plcproj files, relative to the working directory. Alternatively for applications that are developed with the
 *Zeugwerk Development Kit*, which contain a `.Zeugwerk/config.json` file, the folder of the application can be used. In the later case,
-usually `filepath=.`
+usually `filepath=.` (Required)
 
-### 'working-directory'
-
-**Optional** Path of the working directory to change to before running zkdoc. Default: `.`
+* `working-directory`: Path of the working directory to change to before running zkdoc (Optional, defaults to '.')
 
 ## Example usage
 
