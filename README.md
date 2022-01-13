@@ -16,6 +16,19 @@ usually `filepath=.` (Required)
 
 * `working-directory`: Path of the working directory to change to before running zkdoc (Optional, defaults to '.')
 
+
+### Creating secrets
+
+We highly recommend to store the value for `username` and `password` in GitHub as secrets. GitHub Secrets are encrypted and allow you to store sensitive information, such as access tokens, in your repository. Do these steps for `username` and `password`
+
+1. On GitHub, navigate to the main page of the repository.
+2. Under your repository name, click on the "Settings" tab.
+3. In the left sidebar, click Secrets.
+4. On the right bar, click on "Add a new secret" 
+5. Type a name for your secret in the "Name" input box. (i.e. `ACTIONS_ZGWK_USERNAME`, `ACTIONS_ZGWK_PASSWORD`)
+6. Type the value for your secret.
+7. Click Add secret. 
+
 ## Example usage
 
 ```yaml
@@ -39,3 +52,5 @@ jobs:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
           publish_dir: archive/documentation/html
 ```
+
+Please see the documentation of [peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-set-ssh-private-key-deploy_key) for generating the secret `ACTIONS_DEPLOY_KEY`.
