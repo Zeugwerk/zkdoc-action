@@ -11,7 +11,7 @@ This [GitHub Action](https://github.com/features/actions) will build [DocFX](htt
 * `password`: Password of a Zeugwerk Useraccount (Required)
 
 * `filepath`: Path to one or more plcproj files, relative to the working directory. Alternatively for applications that are developed with the
-*Zeugwerk Development Kit*, which contain a `.Zeugwerk/config.json` file, the folder of the application can be used. In the later case,
+*Zeugwerk Development Kit*, which contain a `.Zeugwerk/config.json` file, the folder of the application can be used. In the latter case,
 usually `filepath=.` (Required)
 
 * `working-directory`: Path of the working directory to change to before running zkdoc (Optional, defaults to '.')
