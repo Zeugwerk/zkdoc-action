@@ -1,3 +1,7 @@
+> This service is not officially launched yet!
+> If you want to take part in the beta test, please [contact us](mailto:info@zeugwerk.at)
+
+# DRAFT
 # zkdoc-action
 
 This [GitHub Action](https://github.com/features/actions) will build [DocFX](https://dotnet.github.io/docfx/) docs from the specified TwinCAT PLC. Use with an action such as [actions-gh-pages](https://github.com/peaceiris/actions-gh-pages) to deploy to your project's GitHub pages site!
