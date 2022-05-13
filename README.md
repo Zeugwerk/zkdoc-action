@@ -11,6 +11,12 @@ See this github repository to see how to use zkdoc - https://github.com/stefanbe
 The resulting documentation can be uploaded either as [github pages](https://stefanbesler.github.io/struckig/) or to a private webserver
 which is showcased by the [Zeugwerk Development Kit](https://doc.zeugwerk.dev/)
 
+<div align="center">
+  <a href="https://doc.zeugwerk.dev/">
+    <img width="800px" src="https://user-images.githubusercontent.com/16437661/168259196-e93cb6cf-f6a4-4035-baab-859a80ea0eda.png" />
+  </a>
+</div>
+
 ## Inputs
 
 * `username`: Username of a Zeugwerk Useraccount (Required)
