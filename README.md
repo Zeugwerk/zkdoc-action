@@ -4,6 +4,13 @@ This [GitHub Action](https://github.com/features/actions) will build [DocFX](htt
 
 [Register](https://zeugwerk.dev/wp-login.php?action=register) to use this action for public repositories, this will allow you to run this action 30 times per month. [Contact us](mailto:info@zeugwerk.at) to retrieve a subscription if you need more builds per month or use Zeugwerk Doc for private repositories either on GitHub or any CI/CD server hosted in the cloud or on-premise or need support.
 
+## Demonstration
+
+See this github repository to see how to use zkdoc - https://github.com/stefanbesler/struckig
+
+The resulting documentation can be uploaded either as [github pages](https://stefanbesler.github.io/struckig/) or to a private webserver
+which is showcased by the [Zeugwerk Development Kit](https://doc.zeugwerk.dev/)
+
 ## Inputs
 
 * `username`: Username of a Zeugwerk Useraccount (Required)
