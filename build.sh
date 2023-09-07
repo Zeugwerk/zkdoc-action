@@ -17,7 +17,7 @@ fi
 
 # We got an artifact that we can extract
 if [[ "$status" = *"HTTP/1.1 202"* ]]; then
-    wget -q --user=$1 --password=$2 $artifact -o 'artifact.zip'
+    wget -q --user=$1 --password=$2 -O 'artifact.zip' $artifact
     if [[ $? -ne 0 ]]; then
         exit 202
     fi
