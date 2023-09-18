@@ -16,6 +16,10 @@ inputs:
     description: 'Path to one or more plcproj files or folders that contain a config.json file (spaces seperated)'
     required: true
     default: ''
+  doc-folder:
+    description: 'Location where markdowns and docfx metafiles (tod.yml, ...) of the documentation are located.'
+    required: false
+    default: 'documentation'
   working-directory:
     description: 'Working directory'
     required: false
