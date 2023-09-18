@@ -59,11 +59,15 @@ jobs:
           username: ${{ secrets.ACTIONS_ZGWK_USERNAME }}
           password: ${{ secrets.ACTIONS_ZGWK_PASSWORD }}
           filepath: 'Untitled1/Untitled1.plcproj'
+          doc-folder: 'docs'
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          publish_dir: archive/documentation/html
+          publish_dir: archive/docs/html
 ```
+
+Note that the parameter valu for 'doc-folder' appears again in 'publish_dir'
+
 
 Please see the documentation of [peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-set-ssh-private-key-deploy_key) for generating the secret `ACTIONS_DEPLOY_KEY`.
