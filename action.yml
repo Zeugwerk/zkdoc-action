@@ -35,5 +35,6 @@ runs:
     - ${{ inputs.username }}
     - ${{ inputs.password }}
     - ${{ inputs.filepath }}
+    - ${{ inputs.doc-folder }}
     - ${{ inputs.working-directory }}
     - ${{ inputs.fail-on-error }}    
