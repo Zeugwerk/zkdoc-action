@@ -6,7 +6,7 @@ if [ "$BRANCH" == "" ]; then
 fi;
 #BRANCH=$(echo -n $BRANCH | tr "/" "-")
 
-curl -s --fail --show-error -N -G --data-urlencode "scm=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" --data-urlencode "sha=$GITHUB_SHA" --data-urlencode "branch=$BRANCH" --data-urlencode "username=$1" --data-urlencode "password=$2" --data-urlencode "filepath=$3" --data-urlencode "working-directory=$4" --data-urlencode "method=zkdoc" https://operations.zeugwerk.dev/api.php | tee response
+curl -s --fail --show-error -N -G --data-urlencode "scm=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" --data-urlencode "sha=$GITHUB_SHA" --data-urlencode "branch=$BRANCH" --data-urlencode "username=$1" --data-urlencode "password=$2" --data-urlencode "filepath=$3" --data-urlencode "working-directory=$4" --data-urlencode "doc-folder=$5" --data-urlencode "method=zkdoc" https://operations.zeugwerk.dev/api.php | tee response
 status="$(tail -n1 response)"
 artifact="$(tail -n2 response | head -n1 | cut -d '=' -f2)"
 
