@@ -42,6 +42,49 @@ We highly recommend to store the value for `username` and `password` in GitHub a
 6. Type the value for your secret.
 7. Click Add secret. 
 
+## Config
+
+This action requires a configuration file that is places in the folder `.Zeugwerk/config.json`. The simplest way to generate a configuration file is by using the [Twinpack Package Manager](https://github.com/Zeugwerk/Twinpack/blob/main/README.md#configuration-file-zeugwerkconfigjson).
+
+A typcial configuration file for a solution with 1 PLC looks like this (Twinpack generates this for you automatically)
+
+```json
+{
+  "fileversion": 1,
+  "solution": "TwinCAT Project1.sln",
+  "projects": [
+    {
+      "name": "TwinCAT Project1",
+      "plcs": [
+        {
+          "version": "1.0.0.0",
+          "name": "Untitled1",
+          "type": "Application",
+          "packages": [
+            {
+              "version": "1.2.19.0",
+              "repository": "bot",
+              "name": "ZCore",
+              "branch": "release/1.2",
+              "target": "TC3.1",
+              "configuration": "Distribution",
+              "distributor-name": "Zeugwerk GmbH"
+            }
+          ],
+          "references": {
+            "*": [
+              "Tc2_Standard=*",
+              "Tc2_System=*",
+              "Tc3_Module=*"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
 ## Example usage
 
 ```yaml
