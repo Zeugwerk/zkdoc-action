@@ -42,11 +42,42 @@ We highly recommend to store the value for `username` and `password` in GitHub a
 6. Type the value for your secret.
 7. Click Add secret. 
 
-## Config
+## Example usage
 
-This action requires a configuration file that is places in the folder `.Zeugwerk/config.json`. The simplest way to generate a configuration file is by using the [Twinpack Package Manager](https://github.com/Zeugwerk/Twinpack/blob/main/README.md#configuration-file-zeugwerkconfigjson).
+```yaml
+name: Documentation
+on:
+  workflow_dispatch:
+jobs:
+  Build:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        uses: Zeugwerk/zkdoc-action@1.0.0
+        with:
+          username: ${{ secrets.ACTIONS_ZGWK_USERNAME }}
+          password: ${{ secrets.ACTIONS_ZGWK_PASSWORD }}
+          filepath: 'Untitled1/Untitled1.plcproj'
+          doc-folder: 'docs'
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          publish_dir: archive/docs/html
+```
 
-A typcial configuration file for a solution with 1 PLC looks like this (Twinpack generates this for you automatically)
+Note that the parameter valu for 'doc-folder' appears again in 'publish_dir'
+
+
+Please see the documentation of [peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-set-ssh-private-key-deploy_key) for generating the secret `ACTIONS_DEPLOY_KEY`.
+
+
+## Configuration file
+
+This action can optionally use a configuration file, which has to be placed in the folder `.Zeugwerk/config.json`. The simplest way to generate a configuration file is by using the [Twinpack Package Manager](https://github.com/Zeugwerk/Twinpack/blob/main/README.md#configuration-file-zeugwerkconfigjson).
+
+A typical configuration file for a solution with 1 PLC looks like this (Twinpack generates this for you automatically)
 
 ```json
 {
@@ -85,32 +116,3 @@ A typcial configuration file for a solution with 1 PLC looks like this (Twinpack
 }
 ```
 
-## Example usage
-
-```yaml
-name: Documentation
-on:
-  workflow_dispatch:
-jobs:
-  Build:
-    name: Documentation
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build
-        uses: Zeugwerk/zkdoc-action@1.0.0
-        with:
-          username: ${{ secrets.ACTIONS_ZGWK_USERNAME }}
-          password: ${{ secrets.ACTIONS_ZGWK_PASSWORD }}
-          filepath: 'Untitled1/Untitled1.plcproj'
-          doc-folder: 'docs'
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          publish_dir: archive/docs/html
-```
-
-Note that the parameter valu for 'doc-folder' appears again in 'publish_dir'
-
-
-Please see the documentation of [peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-set-ssh-private-key-deploy_key) for generating the secret `ACTIONS_DEPLOY_KEY`.
