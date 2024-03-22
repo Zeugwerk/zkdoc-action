@@ -9,7 +9,7 @@ This [GitHub Action](https://github.com/features/actions) will build [DocFX](htt
 See this github repository to see how to use zkdoc - https://github.com/stefanbesler/struckig
 
 The resulting documentation can be uploaded either as [github pages](https://stefanbesler.github.io/struckig/) or to a private webserver
-which is showcased by the [Zeugwerk Development Kit](https://doc.zeugwerk.dev/)
+which is showcased by the [Zeugwerk Development Kit](https://doc.zeugwerk.dev/reference/ZCore/Object/Object.html)
 
 <div align="center">
   <a href="https://doc.zeugwerk.dev/">
