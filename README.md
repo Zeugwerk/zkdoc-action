@@ -27,7 +27,7 @@ which is showcased by the [Zeugwerk Development Kit](https://doc.zeugwerk.dev/re
 *Zeugwerk Development Kit*, which contain a `.Zeugwerk/config.json` file, the folder of the application can be used. In the latter case,
 usually `filepath=.` (Required)
 
-* `working-directory`: Path of the working directory to change to before running zkdoc (Optional, defaults to '.')
+* `doc-folder`: Folder that may contain docfx configuration files such as a `docfx.json`, see [here](https://github.com/stefanbesler/struckig/tree/main/docs) for a repo, which is using this parameter
 
 
 ### Creating secrets
