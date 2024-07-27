@@ -17,6 +17,10 @@ which is showcased by the [Zeugwerk Development Kit](https://doc.zeugwerk.dev/re
   </a>
 </div>
 
+## Syntax
+
+Please see [zkdoc](https://doc.zeugwerk.dev/contribute/contribute_documentation.html) to get an overview over special commands that can be used when writing source-code documentation.
+
 ## Inputs
 
 * `username`: Username of a Zeugwerk Useraccount (Required)
