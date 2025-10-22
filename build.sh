@@ -5,6 +5,8 @@ if [ "$BRANCH" == "" ]; then
     BRANCH=$(echo $GITHUB_REF | sed 's/refs\/heads\///');
 fi;
 
+echo "Requesting build ..."
+
 curl -s --show-error -N \
     -F "scm=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
     -F "sha=$GITHUB_SHA" \
@@ -15,28 +17,65 @@ curl -s --show-error -N \
     -F "doc-folder=$4" \
     -F "working-directory=$5" \
     -F "method=zkdoc" \
-    https://zeugwerk.dev/api.php | tee response
+    -F "async=true" \
+    https://zeugwerk.dev/api.php > response 2>&1
 
 status="$(tail -n1 response)"
-artifact="$(tail -n2 response | head -n1 | cut -d '=' -f2)"
+token="$(tail -n2 response | head -n1 | cut -d '=' -f2)"
 
-# Status is not SUCCESS and not UNSTABLE
-if [[ "$status" != *"HTTP/1.1 201"* ]] && [[ "$status" != *"HTTP/1.1 202"* ]]; then
+head -n -4 response
+
+# Status is not PENDING
+if [[ "$status" != *"HTTP/1.1 203"* ]]; then
+    echo -e "\n\nBuild is not queued!"
     exit 1
 fi
 
-# We got an artifact that we can extract
-if [[ "$status" = *"HTTP/1.1 202"* ]]; then
-    wget -q --user=$1 --password=$2 -O 'artifact.zip' $artifact
-    if [[ $? -ne 0 ]]; then
-        exit 202
+while [[ $status == *"HTTP/1.1 203"*   ]]; do
+
+    curl -s --show-error -N \
+        -F "method=zkdoc" \
+        -F "username=$1" \
+        -F "password=$2" \
+        -F "async=true" \
+        -F "token=$token" \
+        https://zeugwerk.dev/api.php > response 2>&1
+
+    status="$(tail -n1 response)"
+    artifact="$(tail -n2 response | head -n1 | cut -d '=' -f2)"
+
+    # Status is not SUCCESS and not UNSTABLE
+    if [[ "$status" != *"HTTP/1.1 201"* ]] && [[ "$status" != *"HTTP/1.1 202"* ]] && [[ "$status" != *"HTTP/1.1 203"* ]]; then
+        tail -n +14 response 
+        echo -e "\n\nBuild unsuccessful!"
+        exit 1
     fi
-    
-    # return code 0 means no errors
-    # return code 1 means there was an error or warning, but processing was successful anyway
-    unzip -q -o 'artifact.zip'
-    echo "HTML Documentation extracted to archive/$4/html"
-    if [[ $? -gt 1 ]]; then
-        exit 202
+
+    # Build is done
+    if [[ "$status" = *"HTTP/1.1 201"* ]]; then
+       tail -n +14 response 
+       exit 0
     fi
-fi
+
+    # We got an artifact that we can extract
+    if [[ "$status" = *"HTTP/1.1 202"* ]]; then
+        tail -n +14 response 
+        wget --user=$1 --password=$2 -q -O 'artifact.zip' $artifact
+        if [[ $? -ne 0 ]]; then
+            exit 202
+        fi
+        
+        # return code 0 means no errors
+        # return code 1 means there was an error or warning, but processing was successful anyway
+        unzip -q -o 'artifact.zip'
+        echo -e "\n\nHTML Documentation extracted to archive/$4/html"
+        if [[ $? -gt 1 ]]; then
+            exit 202
+        fi
+
+        exit 0
+    fi
+
+    sleep 10
+done
+
