@@ -5,6 +5,14 @@ if [ "$BRANCH" == "" ]; then
     BRANCH=$(echo $GITHUB_REF | sed 's/refs\/heads\///');
 fi;
 
+SHA="$GITHUB_SHA"
+
+if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+    SHA=$(jq -r .pull_request.head.sha "$GITHUB_EVENT_PATH")
+fi
+
+echo "Using commit SHA: $SHA"
+
 echo "Requesting build ..."
 
 curl -s --show-error -N \
