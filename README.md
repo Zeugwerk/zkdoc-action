@@ -1,15 +1,8 @@
 # zkdoc-action
 
-This [GitHub Action](https://github.com/features/actions) builds [DocFX](https://dotnet.github.io/docfx/) docs from the specified TwinCAT PLC. Use with an action such as [actions-gh-pages](https://github.com/peaceiris/actions-gh-pages) to deploy to your project's GitHub pages site!
+**Auto-Generate Professional TwinCAT Documentation in CI/CD**: Generate API docs from your TwinCAT source code automatically. Deploy to GitHub Pages or your own server.
 
-[Register](https://zeugwerk.dev/wp-login.php?action=register) to use this action for public repositories, this will allow you to run this action 30 times per month. [Contact us](mailto:info@zeugwerk.at) to retrieve a subscription if you need more builds per month or use Zeugwerk Doc for private repositories either on GitHub or any CI/CD server hosted in the cloud or on-premise or need support.
-
-## Demonstration
-
-See this github repository to see how to use zkdoc - https://github.com/stefanbesler/struckig
-
-The resulting documentation can be uploaded either as [github pages](https://stefanbesler.github.io/struckig/) or to a private webserver
-which is showcased by the [Zeugwerk Development Kit](https://doc.zeugwerk.dev/reference/ZCore/Object/Object.html)
+zkdoc-action is a GitHub Action that builds professional HTML documentation from TwinCAT PLC source code using DocFX. Write docs alongside your code, push to GitHub, get beautiful docs automatically.
 
 <div align="center">
   <a href="https://doc.zeugwerk.dev/">
@@ -17,106 +10,189 @@ which is showcased by the [Zeugwerk Development Kit](https://doc.zeugwerk.dev/re
   </a>
 </div>
 
-## Syntax
 
-Please see [zkdoc](https://doc.zeugwerk.dev/contribute/contribute_documentation.html) to get an overview over special commands that can be used when writing source-code documentation.
+## Why You Need This
+
+- **Auto-generated from source**: Keep docs in sync with code (no manual updates)
+- **Professional output**: API docs, examples, and architecture in one place
+- **Zero maintenance**: Builds automatically on every push
+- **Search-friendly**: Fully indexed, searchable docs
+- **Deploy anywhere**: GitHub Pages, your own server, or anywhere HTTP works
+
+## The Problem It Solves
+
+Most PLC projects have no documentation. Or they have Word docs that get out of sync.
+
+TwinCAT code often looks like:
+```iec61131-st
+FUNCTION_BLOCK Valve
+  (*TODO: explain what this does*)
+  nState : INT;
+  bOpen : BOOL;
+END_FUNCTION_BLOCK
+```
+
+Nobody documents it because it's extra work. By the time a new engineer joins, the code is a mystery.
+
+zkdoc-action fixes this: **Write comments in your code → zkdoc generates searchable docs → Deploy to GitHub Pages → Done.**
+
+## Quick Start
+
+1. **Register (Free for Open Source)**:
+  [Register here](https://zeugwerk.dev/wp-login.php?action=register) to get credentials. 30 free builds/month for public repos.
+
+2. **Create a GitHub Workflow**:
+  Add `.github/workflows/docs.yml`:
+
+  ```yaml
+  name: Documentation
+  on:
+    push:
+      branches: [main, develop]
+    workflow_dispatch:
+
+  jobs:
+    build-docs:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+      
+        - name: Generate Documentation
+          uses: Zeugwerk/zkdoc-action@v1
+          with:
+            username: ${{ secrets.ZEUGWERK_USERNAME }}
+            password: ${{ secrets.ZEUGWERK_PASSWORD }}
+            filepath: '.'
+      
+        - name: Deploy to GitHub Pages
+          uses: peaceiris/actions-gh-pages@v3
+          with:
+            deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+            publish_dir: archive/docs/html
+  ```
+
+3. **Generate deploy key**: Follow [peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages) for setup
+4. **Push**: Your docs now build and deploy automatically
+
+## How It Works
+
+```
+Your TwinCAT Code (with comments)
+        ↓
+    Git Push
+        ↓
+zkdoc-action (GitHub Action)
+        ↓
+  Zeugwerk CI/CD
+        ↓
+  - Parses PLC source
+  - Extracts comments/symbols
+  - Generates HTML with DocFX
+        ↓
+  HTML documentation site
+        ↓
+  Deploy to GitHub Pages
+```
+
+## Writing Docs (In Your Code)
+
+Just add comments above your function blocks and methods:
+
+```iec61131-st
+/// Xy contains some variables to showcase how to write documentation 
+/// Write a detailed description here, each method or property can be documented by using `///` as well
+FUNCTION_BLOCK Xy
+VAR
+  _var1 : REAL; //< description about var1, use //< to write the documentation next to a member variable
+  
+  /// description about var2, use /// to write the documentation about a member variable
+  _var2 : INT;
+  
+  /// the description may use
+  /// multiple lines
+  /// as well
+  _var3 : DINT;
+  
+  _var4 : INT; //< even if the //< delimiter is used
+               //< multiple lines are supported
+                                         
+  /// Also mixing of delimiter 
+  _var5 : ZEquipment.ActuatorDigitalDurations; //< is possible
+                                               //< with multiple lines
+END_VAR
+```
+
+See [zkdoc syntax guide](https://doc.zeugwerk.dev/contribute/contribute_documentation.html) for more options.
+
+## Configuration
+
+### Minimal (Single PLC)
+
+```yaml
+filepath: 'MyPlcProject/MyPlcProject.plcproj'
+```
+
+### With Zeugwerk Projects
+
+If you use [Zeugwerk Framework](https://doc.zeugwerk.dev) or [Twinpack](https://github.com/Zeugwerk/Twinpack), put:
+
+```yaml
+filepath: '.'
+```
+
+This will automatically discover and use your `.Zeugwerk/config.json` file.
+
 
 ## Inputs
 
-* `username`: Username of a Zeugwerk Useraccount (Required)
+| Input | Required | Description |
+|---|---|---|
+| `username` | Yes | Zeugwerk account username |
+| `password` | Yes | Zeugwerk account password |
+| `filepath` | Yes | Path to `.plcproj` or folder containing `.Zeugwerk/config.json` |
+| `doc-folder` | No | Folder with custom `docfx.json` (e.g., `docs/`) |
 
-* `password`: Password of a Zeugwerk Useraccount (Required)
+## Outputs
 
-* `filepath`: Path to one or more plcproj files, relative to the working directory. Alternatively for applications that are developed with the
-*Zeugwerk Development Kit*, which contain a `.Zeugwerk/config.json` file, the folder of the application can be used. In the latter case,
-usually `filepath=.` (Required)
+| Artifact | Location |
+|---|---|
+| HTML documentation | `archive/docs/html/` |
+| Build logs | GitHub Actions UI |
 
-* `doc-folder`: Folder that may contain docfx configuration files such as a `docfx.json`, see [here](https://github.com/stefanbesler/struckig/tree/main/docs) for a repo, which is using this parameter
+## Real Example
 
+See [struckig](https://github.com/stefanbesler/struckig):
+- **Repo**: https://github.com/stefanbesler/struckig
+- **Auto-generated docs**: https://stefanbesler.github.io/struckig/
+- **Workflow file**: [.github/workflows/documentation.yml](https://github.com/stefanbesler/struckig/blob/main/.github/workflows/documentation.yml)
 
-### Creating secrets
+Notice how the docs stay in sync with code automatically.
 
-We highly recommend to store the value for `username` and `password` in GitHub as secrets. GitHub Secrets are encrypted and allow you to store sensitive information, such as access tokens, in your repository. Do these steps for `username` and `password`
+## Pricing
 
-1. On GitHub, navigate to the main page of the repository.
-2. Under your repository name, click on the "Settings" tab.
-3. In the left sidebar, click Secrets.
-4. On the right bar, click on "Add a new secret" 
-5. Type a name for your secret in the "Name" input box. (i.e. `ACTIONS_ZGWK_USERNAME`, `ACTIONS_ZGWK_PASSWORD`)
-6. Type the value for your secret.
-7. Click Add secret. 
+- **Free**: 30 builds/month for public repositories
+- **Commercial**: Custom pricing for private repos. [Contact us](mailto:info@zeugwerk.at)
 
-## Example usage
+## Alternatives
 
-```yaml
-name: Documentation
-on:
-  workflow_dispatch:
-jobs:
-  Build:
-    name: Documentation
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build
-        uses: Zeugwerk/zkdoc-action@1.0.0
-        with:
-          username: ${{ secrets.ACTIONS_ZGWK_USERNAME }}
-          password: ${{ secrets.ACTIONS_ZGWK_PASSWORD }}
-          filepath: 'Untitled1/Untitled1.plcproj'
-          doc-folder: 'docs'
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          publish_dir: archive/docs/html
-```
+| Solution | Setup | Maintenance | Cost |
+|---|---|---|---|
+| Manual Word docs | 1 day | High (outdated) | Free |
+| Doxygen | 2-3 days | High (Parsing Structured Text correctly is not simple) | Free |
+| **zkdoc-action** | **1 hour** | **None** | **Free (*)** |
 
-Note that the parameter valu for 'doc-folder' appears again in 'publish_dir'
+## Troubleshooting
 
+**"Docs aren't generating"**
+- Ensure `filepath` points to a valid `.plcproj` or `.Zeugwerk/config.json`
+- Check GitHub Actions logs for details
 
-Please see the documentation of [peaceiris/actions-gh-pages](https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-set-ssh-private-key-deploy_key) for generating the secret `ACTIONS_DEPLOY_KEY`.
+**"GitHub Pages not deploying"**
+- Verify `deploy_key` secret is set correctly (see peaceiris docs)
+- Check that GitHub Pages is enabled in repository settings
 
+**"Documentation looks wrong"**
+- Check your `docfx.json` config
+- Ensure comments use the right syntax (see [zkdoc guide](https://doc.zeugwerk.dev/contribute/contribute_documentation.html))
 
-## Configuration file
-
-This action can optionally use a configuration file, which has to be placed in the folder `.Zeugwerk/config.json`. The simplest way to generate a configuration file is by using the [Twinpack Package Manager](https://github.com/Zeugwerk/Twinpack/blob/main/README.md#configuration-file-zeugwerkconfigjson).
-
-A typical configuration file for a solution with 1 PLC looks like this (Twinpack generates this for you automatically)
-
-```json
-{
-  "fileversion": 1,
-  "solution": "TwinCAT Project1.sln",
-  "projects": [
-    {
-      "name": "TwinCAT Project1",
-      "plcs": [
-        {
-          "version": "1.0.0.0",
-          "name": "Untitled1",
-          "type": "Application",
-          "packages": [
-            {
-              "version": "1.2.19.0",
-              "repository": "bot",
-              "name": "ZCore",
-              "branch": "release/1.2",
-              "target": "TC3.1",
-              "configuration": "Distribution",
-              "distributor-name": "Zeugwerk GmbH"
-            }
-          ],
-          "references": {
-            "*": [
-              "Tc2_Standard=*",
-              "Tc2_System=*",
-              "Tc3_Module=*"
-            ]
-          }
-        }
-      ]
-    }
-  ]
-}
-```
 
