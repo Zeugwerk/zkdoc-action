@@ -2,6 +2,8 @@
 SCM="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
 SHA="$GITHUB_SHA"
 BRANCH=$GITHUB_HEAD_REF
+ARTIFACT_NAME="${6:-${ARTIFACT_NAME:-artifact.zip}}"
+
 if [ "$BRANCH" == "" ]; then
     BRANCH=$(echo $GITHUB_REF | sed 's/refs\/heads\///');
 fi;
@@ -11,7 +13,6 @@ if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
 fi
 
 echo "Using commit SHA: $SHA"
-
 echo "Login ..."
 curl -s --show-error -N \
     -H "Accept: text/x-shell" \
@@ -82,7 +83,7 @@ while [[ $status == *"HTTP/1.1 203"*   ]]; do
     # We got an artifact that we can extract
     if [[ "$status" = *"HTTP/1.1 202"* ]]; then
         tail -n +14 response 
-        curl --retry 3 --retry-delay 5 -u "$1:$2" -s -o 'artifact.zip' $artifact
+        curl --retry 3 --retry-delay 5 -u "$1:$2" -s -o "$ARTIFACT_NAME" "$artifact"
         if [[ $? -ne 0 ]]; then
             echo "Failed to download artifact from $artifact"
             exit 202
@@ -90,7 +91,7 @@ while [[ $status == *"HTTP/1.1 203"*   ]]; do
         
         # return code 0 means no errors
         # return code 1 means there was an error or warning, but processing was successful anyway
-        unzip -q -o 'artifact.zip'
+        unzip -q -o "$ARTIFACT_NAME"
         echo -e "\n\nHTML Documentation extracted to archive/$4/html"
         if [[ $? -gt 1 ]]; then
             exit 202
