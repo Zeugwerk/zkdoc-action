@@ -1,33 +1,30 @@
 name: 'Zeugwerk Doc Action'
-description: 'Generate documentation on a commented plc project using Zeugwerk Doc'
+description: 'Automatically generate and publish API documentation for TwinCAT/PLC projects using the Zeugwerk Doc service.'
 branding:
   icon: 'book-open'
   color: 'gray-dark'
 inputs:
   username:
-    description: 'Username for the Zeugwerk Doc Service'
+    description: 'Username for authenticating with the Zeugwerk Doc service. Store this as a GitHub secret.'
     required: true
     default: ''
   password:
-    description: 'Password for the Zeugwerk Doc Service'
+    description: 'Password for authenticating with the Zeugwerk Doc service. Store this as a GitHub secret.'
     required: true
     default: ''
   filepath:
-    description: 'Path to one or more plcproj files or folders that contain a config.json file (spaces seperated)'
+    description: 'Space-separated path(s) to .plcproj file(s) or to folder(s) containing a config.json. Example: "src/MyPlc.plcproj" or "PlcA PlcB"'
     required: true
     default: ''
   doc-folder:
-    description: 'Location where markdowns and docfx metafiles (tod.yml, ...) of the documentation are located.'
+    description: 'Output folder where generated Markdown files and DocFX metadata files (toc.yml, etc.) will be written.'
     required: false
     default: 'documentation'
   working-directory:
-    description: 'Working directory'
+    description: 'Root directory from which all paths are resolved. Defaults to the repository root.'
     required: false
     default: '.'
-  fail-on-error:
-    description: 'Fail the build if zkdoc could not be run correctly (syntax error, unsupported syntax in code, ...)'
-    required: false
-    default: true  
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -37,4 +34,4 @@ runs:
     - ${{ inputs.filepath }}
     - ${{ inputs.doc-folder }}
     - ${{ inputs.working-directory }}
-    - ${{ inputs.fail-on-error }}    
+    - ${{ inputs.artifact-name }}    
