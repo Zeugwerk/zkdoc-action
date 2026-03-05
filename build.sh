@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
-
-# Get the current branch name
+SCM="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
+SHA="$GITHUB_SHA"
 BRANCH=$GITHUB_HEAD_REF
 if [ "$BRANCH" == "" ]; then
     BRANCH=$(echo $GITHUB_REF | sed 's/refs\/heads\///');
 fi;
-
-SHA="$GITHUB_SHA"
 
 if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
   SHA=$(jq -r .pull_request.head.sha "$GITHUB_EVENT_PATH")
@@ -37,8 +35,8 @@ echo "Requesting build ..."
 
 curl -s --show-error -N \
     -H "Authorization: Bearer $bearer_token" \
-    -F "scm=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY" \
-    -F "sha=$GITHUB_SHA" \
+    -F "scm=$SCM" \
+    -F "sha=$SHA" \
     -F "branch=$BRANCH" \
     -F "filepath=$3" \
     -F "doc-folder=$4" \
