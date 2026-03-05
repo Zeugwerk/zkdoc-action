@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 SCM="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
 SHA="$GITHUB_SHA"
-# Get the current branch name
 BRANCH=$GITHUB_HEAD_REF
 if [ "$BRANCH" == "" ]; then
     BRANCH=$(echo $GITHUB_REF | sed 's/refs\/heads\///');
