@@ -24,7 +24,11 @@ inputs:
     description: 'Root directory from which all paths are resolved. Defaults to the repository root.'
     required: false
     default: '.'
-
+  artifact-name:
+    description: 'File name for the downloaded build artifact archive. Defaults to "artifact.zip". Override this to avoid collisions when multiple build jobs upload artifacts in the same workflow run.'
+    required: false
+    default: 'artifact.zip'
+    
 runs:
   using: 'docker'
   image: 'Dockerfile'
