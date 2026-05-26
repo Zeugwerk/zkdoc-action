@@ -37,7 +37,7 @@ curl -s --show-error -N \
     -F "scm=$SCM" \
     -F "sha=$SHA" \
     -F "branch=$BRANCH" \
-    -F "pipeline-version=$PIPELINE_VERSION" \    
+    -F "pipeline-version=$PIPELINE_VERSION" \
     -F "filepath=$3" \
     -F "doc-folder=$4" \
     -F "working-directory=$5" \
