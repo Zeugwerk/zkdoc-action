@@ -195,4 +195,7 @@ Notice how the docs stay in sync with code automatically.
 - Check your `docfx.json` config
 - Ensure comments use the right syntax (see [zkdoc guide](https://doc.zeugwerk.dev/contribute/contribute_documentation.html))
 
+## Further Reading
 
+- [TwinCAT Build Tools Landscape 2026](https://zeugwerk.at/blog/twincat-build-tools-landscape-2026/) -- How cloud CI/CD, self-hosted Jenkins, and GitHub Actions compare for TwinCAT teams.
+- [Distributing TwinCAT DevTools On-Prem with Scoop](https://zeugwerk.at/blog/distributing-devtools-with-scoop/) -- How we handle versioned, authenticated distribution of zkmake and zkdoc to on-premises Jenkins nodes.
